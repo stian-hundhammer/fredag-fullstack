@@ -13,7 +13,7 @@ plugins {
     kotlin("plugin.serialization") version "1.8.21"
 }
 
-group = "org.example"
+group = "no.knowledge.fredag"
 version = "1.0-SNAPSHOT"
 
 repositories {
@@ -76,7 +76,7 @@ kotlin {
 }
 
 application {
-    mainClass.set("ServerKt")
+    mainClass.set("no.knowledge.fredag.ServerKt")
 }
 
 // include JS artifacts in any JAR we generate
