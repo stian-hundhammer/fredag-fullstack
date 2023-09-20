@@ -11,11 +11,12 @@ import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.cors.routing.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import org.slf4j.LoggerFactory
 
 // dummy data to start with
 val articleList = listOf("one", "two", "three").map {
     Article(
-        id = "id-$it",
+        id = "$it",
         header = "header $it",
         body = "body $it",
         comments = listOf(
@@ -24,7 +25,11 @@ val articleList = listOf("one", "two", "three").map {
         )
     )
 }
+
+
 fun main() {
+
+    val logger = LoggerFactory.getLogger("my-log")
 
     embeddedServer(Netty, port = 8080) {
 
@@ -60,11 +65,29 @@ fun main() {
                 resources("")
             }
 
-            route(Article.path) {
+            route(Article.articleListPath) {
                 get {
                     call.respond(articleList)
+                }
+            }
+
+            route(Article.articlePath) {
+                get("/{id}") {
+                    val id = call.parameters["id"]
+                    logger.info("id: $id")
+
+                    val a = if (id.isNullOrBlank()) articleList.currentArticle()
+                        else articleList.find { it.id == id }
+
+                    if (a != null) {
+                        call.respond(a)
+                    } else {
+                        call.respond(HttpStatusCode.NotFound)
+                    }
                 }
             }
         }
     }.start(wait = true)
 }
+
+fun List<Article>.currentArticle() = articleList.last()

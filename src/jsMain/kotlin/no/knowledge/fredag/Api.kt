@@ -20,4 +20,11 @@ val jsonClient = HttpClient {
 // define suspend functions used from frontend/react
 //
 
-suspend fun getArticleList(): List<Article> = jsonClient.get(Article.path).body()
+suspend fun getArticleList(): List<Article> = jsonClient.get(Article.articleListPath).body()
+
+suspend fun getArticle(id: String? = null): Article {
+    val sId = if (id != null) id else ""
+
+    return jsonClient.get(
+        urlString = Article.articlePath + "/$sId").body()
+}

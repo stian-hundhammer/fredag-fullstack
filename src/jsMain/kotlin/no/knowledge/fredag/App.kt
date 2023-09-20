@@ -22,42 +22,22 @@ private val scope = MainScope()
 val App = FC<Props> { props ->
 
     // properties
-    var articleList by useState(emptyList<Article>())
-
-    println(articleList::class)
+    // var articleList by useState(emptyList<Article>())
+    var article: Article? by useState<Article>()
 
     useEffectOnce {
         scope.launch {
             // function in Api
             // load data, call function in Api
-            articleList = getArticleList()
+            article = getArticle("two")
         }
     }
 
     h1 {
-        +"Article list"
+        +"${article?.header}"
     }
 
     div {
-        articleList.forEach { article ->
-            h2 {
-                +article.header
-            }
-
-            div {
-                +article.body
-            }
-
-            if (article.comments.isNotEmpty()) {
-                ul {
-                    article.comments.forEach { comment ->
-                        li {
-                            key = comment.id
-                            +"${comment.userName} : ${comment.text}"
-                        }
-                    }
-                }
-            }
-        }
+        +"${article?.body}"
     }
 }
