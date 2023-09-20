@@ -12,6 +12,7 @@ import io.ktor.server.plugins.cors.routing.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.slf4j.LoggerFactory
+import java.io.File
 
 // dummy data to start with
 val articleList = listOf("one", "two", "three").map {
@@ -29,7 +30,7 @@ val articleList = listOf("one", "two", "three").map {
 
 fun main() {
 
-    val logger = LoggerFactory.getLogger("my-log")
+    val logger = LoggerFactory.getLogger("main-server-backend")
 
     embeddedServer(Netty, port = 8080) {
 
@@ -60,6 +61,21 @@ fun main() {
                     contentType = ContentType.Text.Html,
                 )
             }
+
+            val pictures = File("pictures")
+            val musicDir = File("music")
+
+            logger.info("pictures found at ${pictures.absolutePath}")
+
+            staticFiles(
+                remotePath = "/pict",
+                dir = pictures
+                )
+
+            staticFiles(
+                remotePath = "/mp3",
+                dir = musicDir
+            )
 
             static("/") {
                 resources("")

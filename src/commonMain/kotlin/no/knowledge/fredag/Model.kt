@@ -12,7 +12,7 @@ data class Article(
 
     companion object {
         const val articleListPath = "/articleList"
-        const val articlePath = "/x"
+        const val articlePath = "/article"
     }
 }
 @Serializable
