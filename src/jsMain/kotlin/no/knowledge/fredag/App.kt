@@ -22,22 +22,47 @@ private val scope = MainScope()
 val App = FC<Props> { props ->
 
     // properties
-    // var articleList by useState(emptyList<Article>())
-    var article: Article? by useState<Article>()
+    var article: Article? by useState()
+    var articleList: List<Article> by useState(emptyList())
 
     useEffectOnce {
         scope.launch {
             // function in Api
             // load data, call function in Api
             article = getArticle("two")
+            articleList = getArticleList()
         }
     }
 
-    h1 {
-        +"${article?.header}"
+    div {
+        id = "article"
+
+        h1 {
+            +"${article?.header}"
+        }
+
+
+        div {
+            +"${article?.body}"
+        }
     }
 
     div {
-        +"${article?.body}"
+        key = "articleList"
+        ul {
+            articleList.forEach {
+                li {
+                    key = it.id
+                    +"${it.header.startOf()}"
+                    onClick = {
+                        scope.launch {
+                            article = getArticle(key)
+                        }
+                    }
+                }
+            }
+        }
     }
 }
+
+fun String.startOf() = this.substring(0, kotlin.math.min(20, this.length))
