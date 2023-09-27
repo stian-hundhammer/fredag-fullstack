@@ -65,8 +65,6 @@ fun main() {
             val pictures = File("pictures")
             val musicDir = File("music")
 
-            logger.info("pictures found at ${pictures.absolutePath}")
-
             staticFiles(
                 remotePath = "/pict",
                 dir = pictures
@@ -88,6 +86,10 @@ fun main() {
             }
 
             route(Article.articlePath) {
+                get {
+                    call.respond(articleList.currentArticle())
+                }
+
                 get("/{id}") {
                     val id = call.parameters["id"]
                     logger.info("id: $id")

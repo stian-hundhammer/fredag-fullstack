@@ -29,7 +29,7 @@ val App = FC<Props> { props ->
         scope.launch {
             // function in Api
             // load data, call function in Api
-            article = getArticle("two")
+            article = getArticle()
             articleList = getArticleList()
         }
     }
