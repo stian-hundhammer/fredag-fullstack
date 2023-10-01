@@ -8,9 +8,11 @@ import react.dom.html.ReactHTML.div
 import react.dom.html.ReactHTML.h1
 import react.dom.html.ReactHTML.h2
 import react.dom.html.ReactHTML.li
+import react.dom.html.ReactHTML.style
 import react.dom.html.ReactHTML.ul
 import react.useEffectOnce
 import react.useState
+import web.cssom.ClassName
 
 //
 // Scope for UI so we can use suspend functions
@@ -35,28 +37,48 @@ val App = FC<Props> { props ->
     }
 
     div {
-        id = "article"
-
-        h1 {
-            +"${article?.header}"
-        }
-
-
-        div {
-            +"${article?.body}"
-        }
+        id = "header"
+        className = ClassName("header")
+        +"Siden det er fredag..."
     }
 
     div {
-        key = "articleList"
-        ul {
-            articleList.forEach {
-                li {
-                    key = it.id
-                    +"${it.header.startOf()}"
-                    onClick = {
-                        scope.launch {
-                            article = getArticle(key)
+        id = "navigation"
+    }
+
+    div {
+        id = "row"
+        className = ClassName("row")
+
+        div {
+
+            id = "article"
+            className = ClassName("article")
+
+            h1 {
+                +"${article?.header}"
+            }
+
+            div {
+                +"${article?.body}"
+            }
+        }
+
+        div {
+            className = ClassName("rightcolumn")
+
+            div {
+                key = "articleList"
+                ul {
+                    articleList.forEach {
+                        li {
+                            key = it.id
+                            +"${it.header.startOf()}"
+                            onClick = {
+                                scope.launch {
+                                    article = getArticle(key)
+                                }
+                            }
                         }
                     }
                 }
