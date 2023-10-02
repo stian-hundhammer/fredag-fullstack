@@ -1,10 +1,11 @@
 package no.knowledge.fredag
 
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Serializer
 
 @Serializable
 data class Article(
-    val id: String,
+    val id: Long,
     val header: String,
     val body: String,
     val comments: List<Comment>
@@ -17,7 +18,7 @@ data class Article(
 }
 @Serializable
 data class Comment(
-    val id: String,
+    val id: Long,
     val userName: String?,
     val text: String?,
 )

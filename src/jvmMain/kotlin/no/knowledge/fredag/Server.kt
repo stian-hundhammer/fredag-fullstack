@@ -14,23 +14,11 @@ import io.ktor.server.routing.*
 import org.slf4j.LoggerFactory
 import java.io.File
 
-// dummy data to start with
-val articleList = listOf("one", "two", "three").map {
-    Article(
-        id = "$it",
-        header = "header $it",
-        body = "body $it",
-        comments = listOf(
-            Comment(id = "comment-id-$it", userName = "user $it", text = "comment text $it"),
-            Comment(id = "comment-id-x-$it", userName = "user x-$it", text = "comment text x-$it")
-        )
-    )
-}
-
-
 fun main() {
 
     val logger = LoggerFactory.getLogger("main-server-backend")
+    val fredagService = FredagService("/Users/stianhundhammer/devel/projects/fredag/fredagsdata-json.txt")
+    fredagService.loadLegacyData()
 
     embeddedServer(Netty, port = 8080) {
 
@@ -81,21 +69,22 @@ fun main() {
 
             route(Article.articleListPath) {
                 get {
-                    call.respond(articleList)
+                    call.respond(fredagService.articleList)
                 }
             }
 
             route(Article.articlePath) {
                 get {
-                    call.respond(articleList.currentArticle())
+                    call.respond(fredagService.currentArticle())
                 }
 
                 get("/{id}") {
-                    val id = call.parameters["id"]
+                    val id = call.parameters["id"]?.toLong()
                     logger.info("id: $id")
 
-                    val a = if (id.isNullOrBlank()) articleList.currentArticle()
-                        else articleList.find { it.id == id }
+                    //val a = if (id.isNullOrBlank()) fr edagService.currentArticle()
+                    val a = if (id == null) fredagService.currentArticle()
+                        else fredagService.articleList.find { it.id == id }
 
                     if (a != null) {
                         call.respond(a)
@@ -107,5 +96,3 @@ fun main() {
         }
     }.start(wait = true)
 }
-
-fun List<Article>.currentArticle() = articleList.last()
