@@ -4,6 +4,7 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import react.FC
 import react.Props
+import react.dom.html.ReactHTML.br
 import react.dom.html.ReactHTML.div
 import react.dom.html.ReactHTML.h1
 import react.dom.html.ReactHTML.h2
@@ -44,6 +45,8 @@ val App = FC<Props> { props ->
 
     div {
         id = "navigation"
+        className = ClassName("navigation")
+        +"navigation"
     }
 
     div {
@@ -62,11 +65,31 @@ val App = FC<Props> { props ->
             div {
                 +"${article?.body}"
             }
+
+            div {
+                id = "comment-form"
+                +"comment form here!"
+            }
+
+            div {
+                className = ClassName("commenttext")
+                ul {
+                    article?.comments?.forEach {
+                        li {
+                            +"${it.text}"
+                            br
+                            +"${it.userName}"
+                        }
+                    }
+                }
+            }
         }
 
         div {
             className = ClassName("rightcolumn")
 
+            +"rightcolumn"
+            /*
             div {
                 key = "articleList"
                 ul {
@@ -83,7 +106,15 @@ val App = FC<Props> { props ->
                     }
                 }
             }
+
+             */
         }
+    }
+
+    div {
+        className = ClassName("footer")
+        id = "footer"
+        +"footer"
     }
 }
 
