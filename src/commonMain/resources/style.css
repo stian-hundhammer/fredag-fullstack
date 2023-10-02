@@ -1,0 +1,113 @@
+@charset "UTF-8";
+
+body {  font-family: Verdana, Arial, Helvetica; font-size: 1em; color: #000000; background-repeat: no-repeat; background-position: left top; background-color: #ffffff; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px }
+
+td { color: #000000 }
+th { font-size: 1.1em; color: #000000 }
+td.white { color: #ffffff ; background-color : #4444ff }
+th.white { color: #ffffff ; background-color : #222299 }
+table { cell-spacing : 0px }
+img { max-width: 100%; }
+a:active {  color: #0000ff; text-decoration: none}
+a:link { color: #000000; text-decoration: underline  }
+a:visited { color: #111111; text-decoration: underline }
+a:hover {  color: #000000; text-decoration: underline}
+
+a:active.white {  color: #ffffff; text-decoration: none}
+a:link.white { color: #ffffff; text-decoration: underline  }
+a:visited.white { color: #ffffff; text-decoration: underline }
+a:hover.white {  color: #ffffff; text-decoration: underline }
+.archive  li {list-style-type: none; float: left; margin: 15px }
+.archive img { height:100px; width: 100px}
+
+
+.commenttext {
+    #float: left;
+    min-height: 75px;
+    width: 90%;
+    resize: none;
+}
+
+.menu-dropdown {
+    position: relative;     display: inline-block;
+}
+.menu-button {
+    background-color: #ffffff;
+    padding: 13px;
+    border: none;
+    cursor: pointer;
+}
+
+.menu-dropdown:hover .menu-dropdown-content {
+    display: block;
+}
+
+.menu-dropdown:hover .menu-button {
+    background-color: #ffffff;
+}.menu-dropdown-content {
+     display: none;
+     position: absolute;
+     left: -160px;    background-color: #ffffff;
+     min-width: 160px;
+     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+     z-index: 1;
+ }
+
+.menu-dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.menu-dropdown-content a:hover {
+    background-color: #222299;
+    color: #ffffff;
+}
+
+/* new stuff */
+.header {
+    color: #ffffff;
+    background-color: #222299;
+    font-size: 2em;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center
+}
+
+.footer {
+    color: #ffffff;
+    background-color: #222299;
+    font-size: 2em;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center
+}
+
+.navigation {
+    background: pink;
+}
+
+.row {
+    padding: 5px;
+    width: 100%;
+}
+
+.article {
+    width: 85%;
+    float: left;
+    background: yellow;
+}
+
+.rightcolumn {
+    width: 15%;
+    background: aquamarine;
+    float: right;
+}
+
+.row::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+

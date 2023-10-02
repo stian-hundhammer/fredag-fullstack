@@ -23,8 +23,8 @@ val jsonClient = HttpClient {
 suspend fun getArticleList(): List<Article> = jsonClient.get(Article.articleListPath).body()
 
 suspend fun getArticle(id: String? = null): Article {
-    val sId = if (id != null) id else ""
+    val url = if (id == null) Article.articlePath
+        else Article.articlePath + "/$id"
 
-    return jsonClient.get(
-        urlString = Article.articlePath + "/$sId").body()
+    return jsonClient.get(url).body()
 }
