@@ -1,5 +1,6 @@
 package no.knowledge.fredag
 
+import js.core.jso
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import react.FC
@@ -7,9 +8,7 @@ import react.Props
 import react.dom.html.ReactHTML.br
 import react.dom.html.ReactHTML.div
 import react.dom.html.ReactHTML.h1
-import react.dom.html.ReactHTML.h2
 import react.dom.html.ReactHTML.li
-import react.dom.html.ReactHTML.style
 import react.dom.html.ReactHTML.ul
 import react.useEffectOnce
 import react.useState
@@ -63,7 +62,9 @@ val App = FC<Props> { props ->
             }
 
             div {
-                +"${article?.body}"
+                dangerouslySetInnerHTML = jso {
+                    __html = article?.body ?: ""
+                }
             }
 
             div {
