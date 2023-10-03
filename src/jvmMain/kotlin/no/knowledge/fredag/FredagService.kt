@@ -12,7 +12,7 @@ import java.io.File
  * For now, the backend, free from ktor, routing etc
  */
 class FredagService(
-    val legacyDataLocation: String,
+    val legacyDataLocation: String?,
 ) {
 
     private val logger = LoggerFactory.getLogger(javaClass)
@@ -20,23 +20,28 @@ class FredagService(
     lateinit var articleList: List<Article>
 
     fun loadLegacyData() {
-        logger.info("abount to load data from $legacyDataLocation")
-        val j = Json {
-            this.ignoreUnknownKeys = true
+        if (legacyDataLocation != null) {
+            logger.info("abount to load data from $legacyDataLocation")
+            val j = Json {
+                this.ignoreUnknownKeys = true
+            }
+            articleList = j.decodeFromStream<List<Article>>(File(legacyDataLocation).inputStream())
+            logger.info("loaded ${articleList.size} articles")
+        } else {
+            // for now...
+            articleList = listOf(
+                Article(
+                    id = 1,
+                    header = "dummy",
+                    body = "dummy",
+                    comments = emptyList()
+                )
+            )
+
+            logger.info("no legacy data loaded. add dummy article")
         }
-        articleList = j.decodeFromStream<List<Article>>(File(legacyDataLocation).inputStream())
-
-
-        /*
-        articleList = Json.decodeFromStream<List<Article>>(
-            deserializer = ,
-            stream = File(legacyDataLocation)
-        .inputStream())
-        */
-        logger.info("loaded ${articleList.size} articles")
     }
 
     fun currentArticle() : Article = articleList.last()
-
 
 }
