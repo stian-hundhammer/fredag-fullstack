@@ -5,6 +5,7 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import react.FC
 import react.Props
+import react.dom.html.ReactHTML.a
 import react.dom.html.ReactHTML.br
 import react.dom.html.ReactHTML.button
 import react.dom.html.ReactHTML.div
@@ -59,9 +60,9 @@ val App = FC<Props> { props ->
             div {
                 className = ClassName("menu-dropdown-content")
 
-                ul {
+
                     articleRefList.forEach {
-                        li {
+                        a {
                             key = it.id
                             onClick = {
                                 scope.launch {
@@ -71,7 +72,7 @@ val App = FC<Props> { props ->
                             +"${it.header}"
                         }
                     }
-                }
+
             }
 
         }
