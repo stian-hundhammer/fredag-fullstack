@@ -28,3 +28,6 @@ replay_pid*
 /build/classes/kotlin/jvm/main/
 /build/js/packages/vollstapel/kotlin/
 /.idea/
+
+# just my own settings on file locations
+local-dev-env.sh
