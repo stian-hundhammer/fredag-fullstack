@@ -3,10 +3,6 @@ Kind of web site, full stack Kotlin
 
 My first take on this, so this project is very much based on the following:
 
-
-[![official JetBrains project](https://jb.gg/badges/official.svg)](https://confluence.jetbrains.com/display/ALL/JetBrains+on+GitHub)
-[![GitHub license](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](https://www.apache.org/licenses/LICENSE-2.0)
-
 # Full Stack JVM & JS App Hands-On Lab
 
 This repository is the code corresponding to the hands-on lab [Building a Full Stack Web App with Kotlin Multiplatform](https://play.kotlinlang.org/hands-on/Full%20Stack%20Web%20App%20with%20Kotlin%20Multiplatform/).
@@ -15,3 +11,25 @@ This repository is the code corresponding to the hands-on lab [Building a Full S
 
 # YouTube reference
 https://www.youtube.com/watch?v=HEH57g-UP4Q
+
+# Deployment
+
+## Environment variables
+`
+FREDAG_LEGACY_DATA_LOCATION = "/path/to/directory/with/json-file.txt"
+FREDAG_PICT = "/path/do/directory/with/pictures"
+FREDAG_MUSIC = "/path/to/directory/with/music"
+PORT = web server port. Defaults to 8080
+`
+
+## Build for deployment
+`./gradlew clean build installDist`
+
+## start server
+
+### with script
+Make sure you set environment variables before calling `./bin/fredag`
+
+### with Gradle
+`./gradlew run`
+

@@ -52,17 +52,14 @@ fun Application.module() {
             )
         }
 
-        val pictures = File("pictures")
-        val musicDir = File("music")
-
         staticFiles(
-            remotePath = "/pict",
-            dir = pictures
+            remotePath = "/pict/fredag/",
+            dir = File(environment?.config?.propertyOrNull("fredag.pict")?.getString() ?: "pict")
         )
 
         staticFiles(
-            remotePath = "/mp3",
-            dir = musicDir
+            remotePath = "/mp3/",
+            dir = File(environment?.config?.propertyOrNull("fredag.music")?.getString() ?: "music")
         )
 
         static("/") {
