@@ -85,24 +85,15 @@ a:hover.white {  color: #ffffff; text-decoration: underline }
 }
 
 .navigation {
-    background: pink;
+    background: rgb(41, 116, 229);
 }
 
 .row {
-    padding: 5px;
+    padding: 15px;
     width: 100%;
 }
 
 .article {
-    width: 85%;
-    float: left;
-    background: yellow;
-}
-
-.rightcolumn {
-    width: 15%;
-    background: aquamarine;
-    float: right;
 }
 
 .row::after {

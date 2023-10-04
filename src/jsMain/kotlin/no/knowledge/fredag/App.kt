@@ -9,6 +9,7 @@ import react.dom.html.ReactHTML.br
 import react.dom.html.ReactHTML.div
 import react.dom.html.ReactHTML.h1
 import react.dom.html.ReactHTML.li
+import react.dom.html.ReactHTML.p
 import react.dom.html.ReactHTML.ul
 import react.useEffectOnce
 import react.useState
@@ -45,7 +46,7 @@ val App = FC<Props> { props ->
     div {
         id = "navigation"
         className = ClassName("navigation")
-        +"navigation"
+        // +"navigation"
     }
 
     div {
@@ -69,7 +70,7 @@ val App = FC<Props> { props ->
 
             div {
                 id = "comment-form"
-                +"comment form here!"
+                // +"comment form here!"
             }
 
             div {
@@ -77,45 +78,18 @@ val App = FC<Props> { props ->
                 ul {
                     article?.comments?.forEach {
                         li {
-                            +"${it.text}"
-                            br
-                            +"${it.userName}"
+                            +"${it.userName} : ${it.text}"
                         }
                     }
                 }
             }
-        }
-
-        div {
-            className = ClassName("rightcolumn")
-
-            +"rightcolumn"
-            /*
-            div {
-                key = "articleList"
-                ul {
-                    articleList.forEach {
-                        li {
-                            key = it.id
-                            +"${it.header.startOf()}"
-                            onClick = {
-                                scope.launch {
-                                    article = getArticle(key)
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-             */
         }
     }
 
     div {
         className = ClassName("footer")
         id = "footer"
-        +"footer"
+        // +"footer"
     }
 }
 
