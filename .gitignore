@@ -31,3 +31,7 @@ replay_pid*
 
 # just my own settings on file locations
 local-dev-env.sh
+/music
+/pictures
+.DS_Store
+
