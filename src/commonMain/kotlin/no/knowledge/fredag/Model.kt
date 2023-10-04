@@ -22,3 +22,14 @@ data class Comment(
     val userName: String?,
     val text: String?,
 )
+
+@Serializable 
+data class ArticleRef(
+    val id: String,
+    val header: String,
+    val commentSize: Int,
+) {
+    companion object {
+        const val articleRefPath = "/articleRef"
+    }
+}

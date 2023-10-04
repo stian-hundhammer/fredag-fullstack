@@ -92,5 +92,11 @@ fun Application.module() {
                 }
             }
         }
+
+        route(ArticleRef.articleRefPath) {
+            get() {
+                call.respond(fredagService.articleRefList)
+            }
+        }
     }
 }

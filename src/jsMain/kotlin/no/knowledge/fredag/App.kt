@@ -6,11 +6,13 @@ import kotlinx.coroutines.launch
 import react.FC
 import react.Props
 import react.dom.html.ReactHTML.br
+import react.dom.html.ReactHTML.button
 import react.dom.html.ReactHTML.div
 import react.dom.html.ReactHTML.h1
 import react.dom.html.ReactHTML.li
 import react.dom.html.ReactHTML.p
 import react.dom.html.ReactHTML.ul
+import react.dom.html.ReactHTML.wbr
 import react.useEffectOnce
 import react.useState
 import web.cssom.ClassName
@@ -26,14 +28,14 @@ val App = FC<Props> { props ->
 
     // properties
     var article: Article? by useState()
-    var articleList: List<Article> by useState(emptyList())
+    var articleRefList: List<ArticleRef> by useState(emptyList())
 
     useEffectOnce {
         scope.launch {
             // function in Api
             // load data, call function in Api
             article = getArticle()
-            articleList = getArticleList()
+            articleRefList = getArticleRefList()
         }
     }
 
@@ -46,7 +48,33 @@ val App = FC<Props> { props ->
     div {
         id = "navigation"
         className = ClassName("navigation")
-        // +"navigation"
+
+        div {
+            className = ClassName("menu-dropdown")
+            button {
+                className = ClassName("menu-button")
+                +"Arkiv"
+            }
+
+            div {
+                className = ClassName("menu-dropdown-content")
+
+                ul {
+                    articleRefList.forEach {
+                        li {
+                            key = it.id
+                            onClick = {
+                                scope.launch {
+                                    article = getArticle(key)
+                                }
+                            }
+                            +"${it.header}"
+                        }
+                    }
+                }
+            }
+
+        }
     }
 
     div {

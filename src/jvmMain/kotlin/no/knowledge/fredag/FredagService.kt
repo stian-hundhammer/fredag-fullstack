@@ -18,6 +18,7 @@ class FredagService(
     private val logger = LoggerFactory.getLogger(javaClass)
 
     lateinit var articleList: List<Article>
+    lateinit var articleRefList: List<ArticleRef>
 
     fun loadLegacyData() {
         if (legacyDataLocation != null) {
@@ -40,6 +41,15 @@ class FredagService(
 
             logger.info("no legacy data loaded. add dummy article")
         }
+
+        articleRefList = articleList.reversed().map {
+            ArticleRef(
+                id = it.id.toString(),
+                header = it.header,
+                commentSize = it.comments.size
+            )
+        }
+
     }
 
     fun currentArticle() : Article = articleList.last()

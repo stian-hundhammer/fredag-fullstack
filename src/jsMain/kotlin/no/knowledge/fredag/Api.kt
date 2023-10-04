@@ -28,3 +28,5 @@ suspend fun getArticle(id: String? = null): Article {
 
     return jsonClient.get(url).body()
 }
+
+suspend fun getArticleRefList() :List<ArticleRef> = jsonClient.get(ArticleRef.articleRefPath).body()
