@@ -99,7 +99,22 @@ val App = FC<Props> { props ->
 
             div {
                 id = "comment-form"
-                // +"comment form here!"
+                +"comment form here!"
+                inputComponent {
+                    onSubmit = { input ->
+                        val comment = Comment(
+                            id = 3,
+                            userName = "stian",
+                            text = input,
+                            articleId = article?.id
+                        )
+
+                        scope.launch {
+                            addComment(comment)
+                            article = getArticle(article?.id.toString())
+                        }
+                    }
+                }
             }
 
             div {

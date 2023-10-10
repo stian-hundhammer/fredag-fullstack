@@ -27,6 +27,11 @@ class FredagService(
                 this.ignoreUnknownKeys = true
             }
             articleList = j.decodeFromStream<List<Article>>(File(legacyDataLocation).inputStream())
+                .map { legacyArticle ->
+                    legacyArticle.copy(
+                        comments = legacyArticle.comments.map { it.copy(articleId = legacyArticle.id) }
+                    )
+                }
             logger.info("loaded ${articleList.size} articles")
         } else {
             // for now...
@@ -53,5 +58,16 @@ class FredagService(
     }
 
     fun currentArticle() : Article = articleList.last()
+
+    fun addComment(comment: Comment) {
+        // ugly hack....
+        articleList = articleList.map {
+            if (it.id == comment.articleId) {
+                it.copy(
+                    comments =  it.comments + comment
+                )
+            } else it
+        }
+    }
 
 }

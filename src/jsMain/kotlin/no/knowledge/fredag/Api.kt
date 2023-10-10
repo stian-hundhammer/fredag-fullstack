@@ -4,6 +4,7 @@ import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
+import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 
 /**
@@ -30,3 +31,10 @@ suspend fun getArticle(id: String? = null): Article {
 }
 
 suspend fun getArticleRefList() :List<ArticleRef> = jsonClient.get(ArticleRef.articleRefPath).body()
+
+suspend fun addComment(comment: Comment) {
+    jsonClient.post(Comment.commentPath) {
+        contentType(ContentType.Application.Json)
+        setBody(comment)
+    }
+}

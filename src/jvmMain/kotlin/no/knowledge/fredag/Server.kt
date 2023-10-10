@@ -7,6 +7,7 @@ import io.ktor.server.http.content.*
 import io.ktor.server.plugins.compression.*
 import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.cors.routing.*
+import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.slf4j.LoggerFactory
@@ -96,6 +97,14 @@ fun Application.module() {
         route(ArticleRef.articleRefPath) {
             get() {
                 call.respond(fredagService.articleRefList)
+            }
+        }
+
+        route(Comment.commentPath) {
+            post {
+                val comment = call.receive<Comment>()
+                fredagService.addComment(comment)
+                logger.debug("${Comment.commentPath}:post: $comment")
             }
         }
     }
