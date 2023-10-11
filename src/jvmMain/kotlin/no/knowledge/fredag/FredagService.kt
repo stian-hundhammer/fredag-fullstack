@@ -55,6 +55,14 @@ class FredagService(
             logger.info("no legacy data loaded. add dummy article")
         }
 
+        val map = articleFileStore.loadAllArticles()
+            .associate  { it.id to it }
+
+        articleList = articleList.map {
+            map[it.id] ?: it
+        }
+
+
         articleRefList = articleList.reversed().map {
             ArticleRef(
                 id = it.id.toString(),
