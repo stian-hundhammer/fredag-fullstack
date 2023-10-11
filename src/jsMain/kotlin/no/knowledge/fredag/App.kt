@@ -6,17 +6,15 @@ import kotlinx.coroutines.launch
 import react.FC
 import react.Props
 import react.dom.html.ReactHTML.a
-import react.dom.html.ReactHTML.br
 import react.dom.html.ReactHTML.button
 import react.dom.html.ReactHTML.div
 import react.dom.html.ReactHTML.h1
 import react.dom.html.ReactHTML.li
-import react.dom.html.ReactHTML.p
 import react.dom.html.ReactHTML.ul
-import react.dom.html.ReactHTML.wbr
 import react.useEffectOnce
 import react.useState
 import web.cssom.ClassName
+import web.prompts.alert
 
 //
 // Scope for UI so we can use suspend functions
@@ -100,19 +98,21 @@ val App = FC<Props> { props ->
             div {
                 id = "comment-form"
                 +"comment form here!"
-                inputComponent {
-                    onSubmit = { input ->
-                        val comment = Comment(
-                            id = 0,
-                            userName = "stian",
-                            text = input,
-                            articleId = article?.id
-                        )
+                commentComponent {
+                    onSubmit = { userName, text ->
+                        if (userName.isNotBlank() && text.isNotBlank()) {
+                            val comment = Comment(
+                                id = 0,
+                                userName = userName,
+                                text = text,
+                                articleId = article?.id
+                            )
 
-                        scope.launch {
-                            addComment(comment)
-                            article = getArticle(article?.id.toString())
-                        }
+                            scope.launch {
+                                addComment(comment)
+                                article = getArticle(article?.id.toString())
+                            }
+                        } else alert("Ups - ingeting her 😜")
                     }
                 }
             }
