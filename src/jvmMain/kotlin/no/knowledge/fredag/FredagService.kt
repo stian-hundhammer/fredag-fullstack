@@ -1,18 +1,19 @@
 package no.knowledge.fredag
 
-import io.ktor.serialization.kotlinx.json.*
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
-import kotlinx.serialization.serializer
-import org.litote.kmongo.json
 import org.slf4j.LoggerFactory
 import java.io.File
+import java.nio.file.Path
 
 /**
  * For now, the backend, free from ktor, routing etc
  */
 class FredagService(
     val legacyDataLocation: String?,
+    val articleStoreLocation: String,
 ) {
 
     private val logger = LoggerFactory.getLogger(javaClass)
@@ -20,13 +21,20 @@ class FredagService(
     lateinit var articleList: List<Article>
     lateinit var articleRefList: List<ArticleRef>
 
+    val json = Json {
+        this.ignoreUnknownKeys = true
+    }
+
+    val articleFileStore = ArticleFileStore(
+        articleStoreLocation,
+        json,
+    )
+
     fun loadLegacyData() {
         if (legacyDataLocation != null) {
             logger.info("abount to load data from $legacyDataLocation")
-            val j = Json {
-                this.ignoreUnknownKeys = true
-            }
-            articleList = j.decodeFromStream<List<Article>>(File(legacyDataLocation).inputStream())
+
+            articleList = json.decodeFromStream<List<Article>>(File(legacyDataLocation).inputStream())
                 .map { legacyArticle ->
                     legacyArticle.copy(
                         comments = legacyArticle.comments.map { it.copy(articleId = legacyArticle.id) }
@@ -65,9 +73,12 @@ class FredagService(
             if (it.id == comment.articleId) {
                 it.copy(
                     comments =  it.comments + comment
-                )
+                ).also {
+                    runBlocking {
+                        launch { articleFileStore.saveArticle(it) }
+                    }
+                }
             } else it
         }
     }
-
 }

@@ -4,8 +4,13 @@ import react.FC
 import react.Props
 import react.dom.events.ChangeEventHandler
 import react.dom.events.FormEventHandler
+import react.dom.html.ReactHTML.button
 import react.dom.html.ReactHTML.form
+import react.dom.html.ReactHTML.h2
+import react.dom.html.ReactHTML.hr
 import react.dom.html.ReactHTML.input
+import react.dom.html.ReactHTML.p
+import react.dom.html.ReactHTML.textarea
 import react.useState
 import web.html.HTMLFormControlsCollection
 import web.html.HTMLFormElement
@@ -29,12 +34,24 @@ val inputComponent = FC<InputProps> {props ->
         setText(it.target.value)
     }
 
+    h2 {
+        +"Flesk inn!"
+    }
+
     form {
         onSubmit = submitHandler
         input {
             type = InputType.text
             onChange = changeHandler
             value = text
+        }
+
+        textarea {
+
+        }
+
+        button {
+            +"Flesk inn!"
         }
     }
 }

@@ -20,7 +20,8 @@ fun Application.module() {
     val logger = LoggerFactory.getLogger("main-server-backend")
 
     val fredagService = FredagService(
-        legacyDataLocation = environment.config.propertyOrNull("fredag.legacyDataLocation")?.getString()
+        legacyDataLocation = environment.config.propertyOrNull("fredag.legacyDataLocation")?.getString(),
+        articleStoreLocation = environment.config.propertyOrNull("fredag.articles")?.getString()!!
     )
 
     fredagService.loadLegacyData()
@@ -102,7 +103,10 @@ fun Application.module() {
 
         route(Comment.commentPath) {
             post {
-                val comment = call.receive<Comment>()
+                val comment = call.receive<Comment>().copy(
+                    // yet another hack...psaudo-random longs with meaning
+                    System.currentTimeMillis()
+                )
                 fredagService.addComment(comment)
                 logger.debug("${Comment.commentPath}:post: $comment")
             }

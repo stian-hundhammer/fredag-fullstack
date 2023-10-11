@@ -103,7 +103,7 @@ val App = FC<Props> { props ->
                 inputComponent {
                     onSubmit = { input ->
                         val comment = Comment(
-                            id = 3,
+                            id = 0,
                             userName = "stian",
                             text = input,
                             articleId = article?.id
