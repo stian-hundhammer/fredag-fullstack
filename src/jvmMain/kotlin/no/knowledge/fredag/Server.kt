@@ -7,6 +7,7 @@ import io.ktor.server.http.content.*
 import io.ktor.server.plugins.compression.*
 import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.cors.routing.*
+import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.slf4j.LoggerFactory
@@ -19,7 +20,8 @@ fun Application.module() {
     val logger = LoggerFactory.getLogger("main-server-backend")
 
     val fredagService = FredagService(
-        legacyDataLocation = environment.config.propertyOrNull("fredag.legacyDataLocation")?.getString()
+        legacyDataLocation = environment.config.propertyOrNull("fredag.legacyDataLocation")?.getString(),
+        articleStoreLocation = environment.config.propertyOrNull("fredag.articles")?.getString()!!
     )
 
     fredagService.loadLegacyData()
@@ -96,6 +98,17 @@ fun Application.module() {
         route(ArticleRef.articleRefPath) {
             get() {
                 call.respond(fredagService.articleRefList)
+            }
+        }
+
+        route(Comment.commentPath) {
+            post {
+                val comment = call.receive<Comment>().copy(
+                    // yet another hack...psaudo-random longs with meaning
+                    System.currentTimeMillis()
+                )
+                fredagService.addComment(comment)
+                logger.debug("${Comment.commentPath}:post: $comment")
             }
         }
     }

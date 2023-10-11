@@ -33,5 +33,6 @@ replay_pid*
 local-dev-env.sh
 /music
 /pictures
+/articles
 .DS_Store
 
