@@ -40,7 +40,6 @@ class FredagService(
                         comments = legacyArticle.comments.map { it.copy(articleId = legacyArticle.id) }
                     )
                 }
-            logger.info("loaded ${articleList.size} articles")
         } else {
             // for now...
             articleList = listOf(
@@ -68,6 +67,7 @@ class FredagService(
 
         articleList = articleList + map.values
 
+        logger.info("loaded ${articleList.size} articles")
 
         articleRefList = articleList.reversed().map {
             ArticleRef(
