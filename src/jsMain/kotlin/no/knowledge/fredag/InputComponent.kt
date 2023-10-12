@@ -41,15 +41,9 @@ val commentComponent = FC<CommentProps> { props ->
         setText(it.target.value)
     }
 
-
-
-    h2 {
-        +"Flesk inn!"
-    }
-
     form {
 
-
+        className = ClassName("comment-form")
         onSubmit = submitHandler
 
         label {

@@ -97,7 +97,6 @@ val App = FC<Props> { props ->
 
             div {
                 id = "comment-form"
-                +"comment form here!"
                 commentComponent {
                     onSubmit = { userName, text ->
                         if (userName.isNotBlank() && text.isNotBlank()) {
@@ -112,7 +111,7 @@ val App = FC<Props> { props ->
                                 addComment(comment)
                                 article = getArticle(article?.id.toString())
                             }
-                        } else alert("Ups - ingeting her 😜")
+                        } else alert("Ups - noe flesk mangler 😜")
                     }
                 }
             }

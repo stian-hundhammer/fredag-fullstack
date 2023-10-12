@@ -22,10 +22,20 @@ a:hover.white {  color: #ffffff; text-decoration: underline }
 
 
 .commenttext {
-    #float: left;
     min-height: 75px;
     width: 90%;
     resize: none;
+    list-style: none;
+}
+
+.commenttext li {
+    list-style: none;
+    margin-bottom: 10px;
+}
+
+.comment-form input, label, textarea {
+    display: block;
+    padding-bottom: 5px;
 }
 
 .menu-dropdown {

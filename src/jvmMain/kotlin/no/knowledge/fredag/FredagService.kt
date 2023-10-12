@@ -57,10 +57,16 @@ class FredagService(
 
         val map = articleFileStore.loadAllArticles()
             .associate  { it.id to it }
+            .toMutableMap()
 
         articleList = articleList.map {
-            map[it.id] ?: it
+            val newer = map.remove(it.id)
+            if (newer != null) {
+                newer
+            } else it
         }
+
+        articleList = articleList + map.values
 
 
         articleRefList = articleList.reversed().map {
