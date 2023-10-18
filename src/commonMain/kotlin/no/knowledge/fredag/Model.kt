@@ -1,7 +1,6 @@
 package no.knowledge.fredag
 
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Serializer
 
 @Serializable
 data class Article(
@@ -22,6 +21,7 @@ data class Comment(
     val userName: String?,
     val text: String?,
     val articleId: Long? = null,
+    val commentId: String? = null,
 ) {
 
     companion object {
@@ -39,3 +39,18 @@ data class ArticleRef(
         const val articleRefPath = "/articleRef"
     }
 }
+/*
+class EditorialContentReference(
+    type: EditorialContentType,
+    reference: String,
+)
+
+enum class EditorialContentType {
+    ARTICLE,
+    COMMENT,
+    PICTURE,
+    BAND,
+    SONG,
+}
+
+ */

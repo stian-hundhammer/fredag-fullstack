@@ -7,7 +7,6 @@ import react.dom.events.FormEventHandler
 import react.dom.html.ReactHTML.br
 import react.dom.html.ReactHTML.button
 import react.dom.html.ReactHTML.form
-import react.dom.html.ReactHTML.h2
 import react.dom.html.ReactHTML.input
 import react.dom.html.ReactHTML.label
 import react.dom.html.ReactHTML.textarea
@@ -19,18 +18,19 @@ import web.html.HTMLTextAreaElement
 import web.html.InputType
 
 external interface CommentProps : Props {
-    var onSubmit: (String, String) -> Unit
+    var onSubmit: (String, String, String?) -> Unit
 }
 
-val commentComponent = FC<CommentProps> { props ->
+val articleCommentComponent = FC<CommentProps> { props ->
     val (userName, setUserName) = useState("")
     val (text, setText) = useState("")
+    val (commentId, setCommentId) = useState(null)
 
     val submitHandler: FormEventHandler<HTMLFormElement> = {
         it.preventDefault()
         setText("")
         setUserName("")
-        props.onSubmit(userName, text)
+        props.onSubmit(userName, text, commentId)
     }
 
     val userNameChangeHandler: ChangeEventHandler<HTMLInputElement> = {

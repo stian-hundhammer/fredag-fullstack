@@ -98,14 +98,15 @@ val App = FC<Props> { props ->
 
             div {
                 id = "comment-form"
-                commentComponent {
-                    onSubmit = { userName, text ->
+                articleCommentComponent {
+                    onSubmit = { userName, text, commentId ->
                         if (userName.isNotBlank() && text.isNotBlank()) {
                             val comment = Comment(
                                 id = 0,
                                 userName = userName,
                                 text = text,
-                                articleId = article?.id
+                                articleId = article?.id,
+                                commentId = commentId,
                             )
 
                             scope.launch {
@@ -121,11 +122,8 @@ val App = FC<Props> { props ->
                 className = ClassName("commenttext")
                 ul {
                     article?.comments?.forEach {
-                        li {
-                            strong {
-                                +"${it.userName}: "
-                            }
-                            +"${it.text}"
+                        commentComponent {
+                            comment = it
                         }
                     }
                 }
