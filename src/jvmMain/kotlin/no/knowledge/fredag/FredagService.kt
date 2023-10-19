@@ -65,7 +65,7 @@ class FredagService(
             } else it
         }
 
-        articleList = articleList + map.values
+        articleList = articleList + map.values.sortedBy { it.id }
 
         logger.info("loaded ${articleList.size} articles")
 
