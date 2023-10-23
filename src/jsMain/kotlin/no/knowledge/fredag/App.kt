@@ -9,8 +9,6 @@ import react.dom.html.ReactHTML.a
 import react.dom.html.ReactHTML.button
 import react.dom.html.ReactHTML.div
 import react.dom.html.ReactHTML.h1
-import react.dom.html.ReactHTML.li
-import react.dom.html.ReactHTML.strong
 import react.dom.html.ReactHTML.ul
 import react.useEffectOnce
 import react.useState
@@ -24,7 +22,7 @@ private val scope = MainScope()
 
 
 // React app
-val App = FC<Props> { props ->
+val App = FC<Props> { props: Props ->
 
     // properties
     var article: Article? by useState()
