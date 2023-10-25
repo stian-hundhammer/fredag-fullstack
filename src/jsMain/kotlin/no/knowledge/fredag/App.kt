@@ -20,7 +20,6 @@ import web.prompts.alert
 //
 private val scope = MainScope()
 
-
 // React app
 val App = FC<Props> { props: Props ->
 
@@ -57,21 +56,18 @@ val App = FC<Props> { props: Props ->
             div {
                 className = ClassName("menu-dropdown-content")
 
-
-                    articleRefList.forEach {
-                        a {
-                            key = it.id
-                            onClick = {
-                                scope.launch {
-                                    article = getArticle(key)
-                                }
+                articleRefList.forEach {
+                    a {
+                        key = it.id
+                        onClick = {
+                            scope.launch {
+                                article = getArticle(key)
                             }
-                            +"${it.header}"
                         }
+                        +"${it.header}"
                     }
-
+                }
             }
-
         }
     }
 
@@ -104,14 +100,16 @@ val App = FC<Props> { props: Props ->
                                 userName = userName,
                                 text = text,
                                 articleId = article?.id,
-                                commentId = commentId,
+                                commentId = commentId
                             )
 
                             scope.launch {
                                 addComment(comment)
                                 article = getArticle(article?.id.toString())
                             }
-                        } else alert("Ups - noe flesk mangler 😜")
+                        } else {
+                            alert("Ups - noe flesk mangler 😜")
+                        }
                     }
                 }
             }

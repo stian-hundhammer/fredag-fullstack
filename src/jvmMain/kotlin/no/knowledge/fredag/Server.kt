@@ -16,7 +16,6 @@ import java.io.File
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
 fun Application.module() {
-
     val logger = LoggerFactory.getLogger("main-server-backend")
 
     val fredagService = FredagService(
@@ -50,7 +49,7 @@ fun Application.module() {
         get("/") {
             call.respondText(
                 text = javaClass.classLoader.getResource("index.html")!!.readText(),
-                contentType = ContentType.Text.Html,
+                contentType = ContentType.Text.Html
             )
         }
 
@@ -83,9 +82,12 @@ fun Application.module() {
                 val id = call.parameters["id"]?.toLong()
                 logger.info("id: $id")
 
-                //val a = if (id.isNullOrBlank()) fr edagService.currentArticle()
-                val a = if (id == null) fredagService.currentArticle()
-                else fredagService.articleList.find { it.id == id }
+                // val a = if (id.isNullOrBlank()) fr edagService.currentArticle()
+                val a = if (id == null) {
+                    fredagService.currentArticle()
+                } else {
+                    fredagService.articleList.find { it.id == id }
+                }
 
                 if (a != null) {
                     call.respond(a)

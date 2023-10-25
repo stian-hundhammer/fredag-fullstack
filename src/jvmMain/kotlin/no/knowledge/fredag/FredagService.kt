@@ -6,14 +6,13 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 import org.slf4j.LoggerFactory
 import java.io.File
-import java.nio.file.Path
 
 /**
  * For now, the backend, free from ktor, routing etc
  */
 class FredagService(
     val legacyDataLocation: String?,
-    val articleStoreLocation: String,
+    val articleStoreLocation: String
 ) {
 
     private val logger = LoggerFactory.getLogger(javaClass)
@@ -27,7 +26,7 @@ class FredagService(
 
     val articleFileStore = ArticleFileStore(
         articleStoreLocation,
-        json,
+        json
     )
 
     fun loadLegacyData() {
@@ -55,14 +54,16 @@ class FredagService(
         }
 
         val map = articleFileStore.loadAllArticles()
-            .associate  { it.id to it }
+            .associate { it.id to it }
             .toMutableMap()
 
         articleList = articleList.map {
             val newer = map.remove(it.id)
             if (newer != null) {
                 newer
-            } else it
+            } else {
+                it
+            }
         }
 
         articleList = articleList + map.values.sortedBy { it.id }
@@ -76,23 +77,24 @@ class FredagService(
                 commentSize = it.comments.size
             )
         }
-
     }
 
-    fun currentArticle() : Article = articleList.last()
+    fun currentArticle(): Article = articleList.last()
 
     fun addComment(comment: Comment) {
         // ugly hack....
         articleList = articleList.map {
             if (it.id == comment.articleId) {
                 it.copy(
-                    comments =  it.comments + comment
+                    comments = it.comments + comment
                 ).also {
                     runBlocking {
                         launch { articleFileStore.saveArticle(it) }
                     }
                 }
-            } else it
+            } else {
+                it
+            }
         }
     }
 }

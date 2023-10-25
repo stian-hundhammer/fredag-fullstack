@@ -24,13 +24,16 @@ val jsonClient = HttpClient {
 suspend fun getArticleList(): List<Article> = jsonClient.get(Article.articleListPath).body()
 
 suspend fun getArticle(id: String? = null): Article {
-    val url = if (id == null) Article.articlePath
-        else Article.articlePath + "/$id"
+    val url = if (id == null) {
+        Article.articlePath
+    } else {
+        Article.articlePath + "/$id"
+    }
 
     return jsonClient.get(url).body()
 }
 
-suspend fun getArticleRefList() :List<ArticleRef> = jsonClient.get(ArticleRef.articleRefPath).body()
+suspend fun getArticleRefList(): List<ArticleRef> = jsonClient.get(ArticleRef.articleRefPath).body()
 
 suspend fun addComment(comment: Comment) {
     jsonClient.post(Comment.commentPath) {

@@ -4,9 +4,8 @@ import react.FC
 import react.Props
 import react.dom.html.ReactHTML
 import react.dom.html.ReactHTML.li
-import react.useState
 
-external interface OneCommentProps: Props {
+external interface OneCommentProps : Props {
     var comment: Comment
 }
 
@@ -18,4 +17,3 @@ val commentComponent = FC<OneCommentProps> { props ->
         +"${props.comment.text}"
     }
 }
-

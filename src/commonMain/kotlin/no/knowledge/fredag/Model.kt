@@ -15,13 +15,14 @@ data class Article(
         const val articlePath = "/article"
     }
 }
+
 @Serializable
 data class Comment(
     val id: Long,
     val userName: String?,
     val text: String?,
     val articleId: Long? = null,
-    val commentId: String? = null,
+    val commentId: String? = null
 ) {
 
     companion object {
@@ -29,11 +30,11 @@ data class Comment(
     }
 }
 
-@Serializable 
+@Serializable
 data class ArticleRef(
     val id: String,
     val header: String,
-    val commentSize: Int,
+    val commentSize: Int
 ) {
     companion object {
         const val articleRefPath = "/articleRef"
