@@ -6,6 +6,8 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 import org.slf4j.LoggerFactory
 import java.io.File
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 /**
  * For now, the backend, free from ktor, routing etc
@@ -30,10 +32,10 @@ class FredagService(
     )
 
     fun loadLegacyData() {
-        if (legacyDataLocation != null) {
+        val legacyArticleList = if (legacyDataLocation != null) {
             logger.info("abount to load data from $legacyDataLocation")
 
-            articleList = json.decodeFromStream<List<Article>>(File(legacyDataLocation).inputStream())
+            json.decodeFromStream<List<Article>>(File(legacyDataLocation).inputStream())
                 .map { legacyArticle ->
                     legacyArticle.copy(
                         comments = legacyArticle.comments.map { it.copy(articleId = legacyArticle.id) }
@@ -41,32 +43,35 @@ class FredagService(
                 }
         } else {
             // for now...
-            articleList = listOf(
+            listOf(
                 Article(
                     id = 1,
                     header = "dummy",
                     body = "dummy",
                     comments = emptyList()
                 )
-            )
-
-            logger.info("no legacy data loaded. add dummy article")
+            ).also {
+                logger.info("no legacy data loaded. add dummy article")
+            }
         }
 
         val map = articleFileStore.loadAllArticles()
             .associate { it.id to it }
             .toMutableMap()
 
-        articleList = articleList.map {
-            val newer = map.remove(it.id)
+        // replace those from legacy store by those stored
+        // in files
+        // Add those left in the map
+        articleList = legacyArticleList.map {
+            val newer = map.remove(it.id) ?: it
             if (newer != null) {
                 newer
             } else {
                 it
             }
-        }
+        } + map.values.sortedBy { it.id }
 
-        articleList = articleList + map.values.sortedBy { it.id }
+        articleList = articleList.map { it.insertPlayer() }
 
         logger.info("loaded ${articleList.size} articles")
 
@@ -97,4 +102,28 @@ class FredagService(
             }
         }
     }
+
+    private fun Article.insertPlayer(): Article =
+        copy(
+            body = body.lines()
+                .joinToString(
+                    separator = "\n"
+                ) { line ->
+                    val matcher: Matcher = linkPattern.matcher(line)
+
+                    if (matcher.find()) {
+                        replaceLine(line, matcher).also {
+                            logger.debug("articleId: ${this.id} -replace line with $it")
+                        }
+                    } else {
+                        line
+                    }
+                }
+        )
+
+    private fun replaceLine(line: String, matcher: Matcher): String =
+        line + String.format(audioPlayerReplacement, matcher.group(0))
+
+    private val linkPattern = Pattern.compile("/mp3/\\w+.mp3")
+    private val audioPlayerReplacement = "<br/><audio controls><source src=\"%s\" type=\"audio/mpeg\"></audio><br/>"
 }
