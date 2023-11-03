@@ -9,8 +9,9 @@ val kmongoVersion = "4.5.0"
 
 plugins {
     kotlin("multiplatform") version "1.8.21"
-    application //to run JVM part
+    application // to run JVM part
     kotlin("plugin.serialization") version "1.8.21"
+    id("org.jlleitschuh.gradle.ktlint") version "11.6.1"
 }
 
 group = "no.knowledge.fredag"
@@ -81,8 +82,8 @@ application {
 
 // include JS artifacts in any JAR we generate
 tasks.named<Jar>("jvmJar").configure {
-    val taskName = if (project.hasProperty("isProduction")
-        || project.gradle.startParameter.taskNames.contains("installDist")
+    val taskName = if (project.hasProperty("isProduction") ||
+        project.gradle.startParameter.taskNames.contains("installDist")
     ) {
         "jsBrowserProductionWebpack"
     } else {

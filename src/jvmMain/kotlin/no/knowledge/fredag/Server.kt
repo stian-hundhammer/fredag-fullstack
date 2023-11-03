@@ -1,22 +1,34 @@
 package no.knowledge.fredag
 
-import io.ktor.http.*
-import io.ktor.serialization.kotlinx.json.*
-import io.ktor.server.application.*
-import io.ktor.server.http.content.*
-import io.ktor.server.plugins.compression.*
-import io.ktor.server.plugins.contentnegotiation.*
-import io.ktor.server.plugins.cors.routing.*
-import io.ktor.server.request.*
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
+import io.ktor.http.ContentType
+import io.ktor.http.HttpMethod
+import io.ktor.http.HttpStatusCode
+import io.ktor.serialization.kotlinx.json.json
+import io.ktor.server.application.Application
+import io.ktor.server.application.call
+import io.ktor.server.application.install
+import io.ktor.server.http.content.resources
+import io.ktor.server.http.content.static
+import io.ktor.server.http.content.staticFiles
+import io.ktor.server.plugins.compression.Compression
+import io.ktor.server.plugins.compression.deflate
+import io.ktor.server.plugins.compression.gzip
+import io.ktor.server.plugins.compression.minimumSize
+import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.server.plugins.cors.routing.CORS
+import io.ktor.server.request.receive
+import io.ktor.server.response.respond
+import io.ktor.server.response.respondText
+import io.ktor.server.routing.get
+import io.ktor.server.routing.post
+import io.ktor.server.routing.route
+import io.ktor.server.routing.routing
 import org.slf4j.LoggerFactory
 import java.io.File
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
 fun Application.module() {
-
     val logger = LoggerFactory.getLogger("main-server-backend")
 
     val fredagService = FredagService(
@@ -50,7 +62,7 @@ fun Application.module() {
         get("/") {
             call.respondText(
                 text = javaClass.classLoader.getResource("index.html")!!.readText(),
-                contentType = ContentType.Text.Html,
+                contentType = ContentType.Text.Html
             )
         }
 
@@ -83,9 +95,12 @@ fun Application.module() {
                 val id = call.parameters["id"]?.toLong()
                 logger.info("id: $id")
 
-                //val a = if (id.isNullOrBlank()) fr edagService.currentArticle()
-                val a = if (id == null) fredagService.currentArticle()
-                else fredagService.articleList.find { it.id == id }
+                // val a = if (id.isNullOrBlank()) fr edagService.currentArticle()
+                val a = if (id == null) {
+                    fredagService.currentArticle()
+                } else {
+                    fredagService.articleList.find { it.id == id }
+                }
 
                 if (a != null) {
                     call.respond(a)

@@ -14,7 +14,7 @@ import java.util.regex.Pattern
  */
 class FredagService(
     val legacyDataLocation: String?,
-    val articleStoreLocation: String,
+    val articleStoreLocation: String
 ) {
 
     private val logger = LoggerFactory.getLogger(javaClass)
@@ -28,7 +28,7 @@ class FredagService(
 
     val articleFileStore = ArticleFileStore(
         articleStoreLocation,
-        json,
+        json
     )
 
     fun loadLegacyData() {
@@ -56,7 +56,7 @@ class FredagService(
         }
 
         val map = articleFileStore.loadAllArticles()
-            .associate  { it.id to it }
+            .associate { it.id to it }
             .toMutableMap()
 
         // replace those from legacy store by those stored
@@ -66,11 +66,12 @@ class FredagService(
             val newer = map.remove(it.id) ?: it
             if (newer != null) {
                 newer
-            } else it
+            } else {
+                it
+            }
         } + map.values.sortedBy { it.id }
 
         articleList = articleList.map { it.insertPlayer() }
-
 
         logger.info("loaded ${articleList.size} articles")
 
@@ -83,28 +84,30 @@ class FredagService(
         }
     }
 
-    fun currentArticle() : Article = articleList.last()
+    fun currentArticle(): Article = articleList.last()
 
     fun addComment(comment: Comment) {
         // ugly hack....
         articleList = articleList.map {
             if (it.id == comment.articleId) {
                 it.copy(
-                    comments =  it.comments + comment
+                    comments = it.comments + comment
                 ).also {
                     runBlocking {
                         launch { articleFileStore.saveArticle(it) }
                     }
                 }
-            } else it
+            } else {
+                it
+            }
         }
     }
 
-    private fun Article.insertPlayer() : Article =
+    private fun Article.insertPlayer(): Article =
         copy(
             body = body.lines()
                 .joinToString(
-                    separator = "\n",
+                    separator = "\n"
                 ) { line ->
                     val matcher: Matcher = linkPattern.matcher(line)
 
@@ -112,7 +115,9 @@ class FredagService(
                         replaceLine(line, matcher).also {
                             logger.debug("articleId: ${this.id} -replace line with $it")
                         }
-                    } else line
+                    } else {
+                        line
+                    }
                 }
         )
 
@@ -121,5 +126,4 @@ class FredagService(
 
     private val linkPattern = Pattern.compile("/mp3/\\w+.mp3")
     private val audioPlayerReplacement = "<br/><audio controls><source src=\"%s\" type=\"audio/mpeg\"></audio><br/>"
-
 }

@@ -4,7 +4,6 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 import org.slf4j.LoggerFactory
-import java.nio.file.FileSystem
 import java.nio.file.FileSystems
 import java.nio.file.Path
 import kotlin.io.path.exists
@@ -12,7 +11,7 @@ import kotlin.io.path.writeText
 
 class ArticleFileStore(
     storeLocation: String,
-    val json: Json,
+    val json: Json
 ) {
 
     val articlePath: Path
@@ -33,7 +32,7 @@ class ArticleFileStore(
     }
 
     fun loadAllArticles(): List<Article> =
-          articlePath.toFile().walk()
+        articlePath.toFile().walk()
             .filter { file -> file.name.equals("article.json") }
             .map { file ->
                 json.decodeFromStream<Article>(
