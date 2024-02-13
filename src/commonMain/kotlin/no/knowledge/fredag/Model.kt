@@ -17,6 +17,21 @@ data class Article(
 }
 
 @Serializable
+data class Comments(
+    val articleId: Long,
+    val comments: List<TmpComment>
+)
+
+@Serializable
+data class TmpComment(
+    val id: Long,
+    val userName: String,
+    val text: String,
+    val articleId: Long,
+    val timestamp: String
+)
+
+@Serializable
 data class Comment(
     val id: Long,
     val userName: String?,

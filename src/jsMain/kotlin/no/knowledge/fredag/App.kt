@@ -99,8 +99,8 @@ val App = FC<Props> { props: Props ->
                                 id = 0,
                                 userName = userName,
                                 text = text,
-                                articleId = article?.id,
-                                commentId = commentId
+                                articleId = article?.id!!
+                                // commentId = commentId!!
                             )
 
                             scope.launch {

@@ -39,4 +39,12 @@ class ArticleFileStore(
                     file.inputStream()
                 )
             }.toList()
+
+    fun saveAllComments(comments: Comments) {
+        val articlePath = articlePath.resolve(comments.articleId.toString())
+        articlePath.takeIf { !it.exists() }?.toFile()?.mkdir()
+
+        articlePath.resolve("comments.json")
+            .writeText(json.encodeToString(comments))
+    }
 }

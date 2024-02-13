@@ -71,7 +71,9 @@ class FredagService(
             }
         } + map.values.sortedBy { it.id }
 
-        articleList = articleList.map { it.insertPlayer() }
+        // bug. player should not be part of article source
+        // When saved, the player is included
+        // articleList = articleList.map { it.insertPlayer() }
 
         logger.info("loaded ${articleList.size} articles")
 

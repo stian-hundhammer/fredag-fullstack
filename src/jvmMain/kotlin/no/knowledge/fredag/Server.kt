@@ -25,6 +25,10 @@ import io.ktor.server.routing.route
 import io.ktor.server.routing.routing
 import org.slf4j.LoggerFactory
 import java.io.File
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
@@ -124,6 +128,42 @@ fun Application.module() {
                 )
                 fredagService.addComment(comment)
                 logger.debug("${Comment.commentPath}:post: $comment")
+            }
+        }
+
+        route("/dump") {
+            get {
+                val newStorage = ArticleFileStore(
+                    storeLocation = "/tmp/dump-fredag",
+                    fredagService.json
+                )
+                fredagService.articleList.forEach { a ->
+                    newStorage.saveArticle(a)
+                    val comments = Comments(
+                        articleId = a.id,
+                        comments = a.comments.map {
+                            TmpComment(
+                                id = it.id,
+                                articleId = a.id,
+                                text = it.text ?: "missing",
+                                userName = it.userName ?: "missing",
+                                timestamp = it.id.toString()
+                                // ZonedDateTime.ofInstant(Instant.ofEpochSecond(it.id), ZoneId.of("UTC"))
+                            )
+                        }
+                    )
+
+                    newStorage.saveAllComments(
+                        comments
+                    )
+
+                    logger.info("::dump() article:${a.id}, comments:${comments.comments.size} : ${a.header}")
+                }
+
+                call.respondText(
+                    text = "ok",
+                    contentType = ContentType.Text.Plain
+                )
             }
         }
     }
