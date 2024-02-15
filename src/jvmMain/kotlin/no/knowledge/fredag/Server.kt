@@ -126,5 +126,41 @@ fun Application.module() {
                 logger.debug("${Comment.commentPath}:post: $comment")
             }
         }
+
+        route("/dump") {
+            get {
+                val newStorage = ArticleFileStore(
+                    storeLocation = "/tmp/dump-fredag",
+                    fredagService.json
+                )
+                fredagService.articleList.forEach { a ->
+                    newStorage.saveArticle(a)
+                    val comments = Comments(
+                        articleId = a.id,
+                        comments = a.comments.map {
+                            TmpComment(
+                                id = it.id,
+                                articleId = a.id,
+                                text = it.text ?: "missing",
+                                userName = it.userName ?: "missing",
+                                timestamp = it.id.toString()
+                                // ZonedDateTime.ofInstant(Instant.ofEpochSecond(it.id), ZoneId.of("UTC"))
+                            )
+                        }
+                    )
+
+                    newStorage.saveAllComments(
+                        comments
+                    )
+
+                    logger.info("::dump() article:${a.id}, comments:${comments.comments.size} : ${a.header}")
+                }
+
+                call.respondText(
+                    text = "ok",
+                    contentType = ContentType.Text.Plain
+                )
+            }
+        }
     }
 }
