@@ -120,7 +120,7 @@ fun Application.module() {
             post {
                 val comment = call.receive<Comment>().copy(
                     // yet another hack...psaudo-random longs with meaning
-                    System.currentTimeMillis()
+                    id = System.currentTimeMillis()
                 )
                 fredagService.addComment(comment)
                 logger.debug("${Comment.commentPath}:post: $comment")
